@@ -16,7 +16,7 @@
       and
     fail2ban_reload.rc | int > 0
       and
-    install_fail2ban | bool
+    nfc_role_firewall_install_fail2ban | bool
 
 
 - name: Configure_fail2ban
@@ -30,7 +30,7 @@
   loop: "{{ fail2ban_configuration }}"
   notify: reload_fail2ban
   # when: fail2ban_configuration is defined
-  when: install_fail2ban | bool
+  when: nfc_role_firewall_install_fail2ban | bool
 
 
 - name: Restart iptables to load changed/new rules
