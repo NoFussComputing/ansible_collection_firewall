@@ -1,5 +1,12 @@
 ---
 
+- name: Check if IPv6 Enabled
+  ansible.builtin.stat:
+    path: /proc/sys/net/ipv6/conf/all/disable_ipv6
+  register: ipv6_file
+  failed_when: false
+
+
 - name: Create Required directories
   ansible.builtin.file:
     name: "{{ item.name }}"
@@ -17,6 +24,9 @@
       - name: /etc/ip6tables.rules.d
         state: directory
         mode: '700'
+        when: "{{ ipv6_file.stat.exists }}"
+  when: >
+    item.when | default(true) | bool
 
 
 - name: Add Firewall Rules Reloader Script
@@ -93,6 +103,7 @@
 
       done
 
+      {% if ipv6_file.stat.exists %}
       for file_name in `find /etc/ip6tables.rules.d/ -type f | sort`
       do
 
@@ -122,6 +133,8 @@
         fi
 
       done
+      {% endif %}
+
     dest: /bin/iptables-reloader
     mode: '700'
     owner: root
