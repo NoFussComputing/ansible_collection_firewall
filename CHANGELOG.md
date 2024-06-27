@@ -1,3 +1,10 @@
+## 1.1.1 (2024-06-27)
+
+### Fix
+
+- **ipv6**: check if IPv6 is enabled and exclude tasks if false
+- **handler**: use correct var for fail2ban install
+
 ## 1.1.0 (2024-03-21)
 
 ### Feat
